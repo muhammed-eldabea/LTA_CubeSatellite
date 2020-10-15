@@ -80,21 +80,6 @@ switch (Mode )
         FaluairMode () ; 
    break ;
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 } 
 
 
@@ -225,7 +210,7 @@ else if (StateFlag == GetData )
 /*=======================================================*/
 void SlaveWrite(int data ) 
 { 
-  StateFlag == sendData ; 
+  StateFlag = sendData ; 
   SLAVE_SEND_DATA = data ; 
   delay (400)  ;  
 } 
@@ -234,7 +219,7 @@ void SlaveWrite(int data )
 /*=======================================================*/
 int SlaveRead() 
 { 
-  StateFlag == GetData ; 
+  StateFlag = GetData ; 
   delay (400) ; 
   return SLAVE_Recived_DATA ; 
 }  
