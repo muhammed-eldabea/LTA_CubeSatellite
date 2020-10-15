@@ -80,6 +80,21 @@ switch (Mode )
         FaluairMode () ; 
    break ;
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 } 
 
 
@@ -101,6 +116,7 @@ void CONTROL_IntialMode( )
   pinMode( DownLoadModeLed ,OUTPUT) ;
   pinMode (MotorPin , OUTPUT) ; 
   pinMode(LaserBeamPin,OUTPUT) ; 
+  pinMode(FallModeLed,OUTPUT) ; 
 
   /*initial Mode indicator*/
   digitalWrite(InitialModeLed , HIGH) ; 
@@ -134,14 +150,9 @@ void CONTROL_ImagingMode( )
 
 void CONTROL_DownloadnMode( )
 {
-
-
-
 SlaveWrite( 78 )  ; 
-
-
 /*Download Mode Indicator */
-digitalWrite(ImagingModeLed , HIGH) ;
+digitalWrite(DownLoadModeLed , HIGH) ;
 
 }
 
