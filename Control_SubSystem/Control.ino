@@ -26,7 +26,7 @@
 #define MotorPin         8 
 #define LaserBeamPin     9  
 
-
+#define Synch_Pin               11 
 
 /* GLOBAL DATA */
 
@@ -41,6 +41,7 @@ void CONTROL_ImagingMode( ) ;
 void CONTROL_DownloadnMode( ) ; 
 void CONTROL_FinishTask( )  ; 
 void FaluairMode () ;  
+void SynchWithOBC()  ; 
 
 
 /***********Drivers Based Function **************/
@@ -64,21 +65,32 @@ Mode = SlaveRead() ;
 switch (Mode ) 
 {
    case INITIAL_MODE_SELECT : 
-        CONTROL_IntialMode( )  ;
+        CONTROL_IntialMode( )  ; 
+        Mode= 0 ; 
+        SynchWithOBC()
+        
    break ;
    
    case IMAGING_MODE_SELECT : 
-        CONTROL_ImagingMode( ) ; 
+        CONTROL_ImagingMode( ) ;
+        Mode= 0 ; 
+        SynchWithOBC()
    break ;
    
    case DOWNLOAD_MODE_SELECT : 
         CONTROL_DownloadnMode( ) ; 
         CONTROL_FinishTask( )  ;
+        Mode= 0 ;
+        SynchWithOBC()
    break ;  
 
    case FALL_MODE_SELECT :  
-        FaluairMode () ; 
-   break ;
+        FaluairMode () ;
+        Mode= 0 ; 
+        SynchWithOBC()
+   break ; 
+   default : 
+   Mode= 0 ; 
 } 
 
 
@@ -117,6 +129,7 @@ void CONTROL_IntialMode( )
   pinMode (MotorPin , OUTPUT) ; 
   pinMode(LaserBeamPin,OUTPUT) ; 
   pinMode(FallModeLed,OUTPUT) ; 
+  pinMode(Synch_Pin,OUTPUT) ; 
 
   /*initial Mode indicator*/
   digitalWrite(InitialModeLed , HIGH) ; 
@@ -146,7 +159,7 @@ void CONTROL_ImagingMode( )
 } 
 
 
-/*=======================================================*/
+/*=======================================================*/p
 
 void CONTROL_DownloadnMode( )
 {
@@ -234,3 +247,12 @@ int SlaveRead()
   delay (400) ; 
   return SLAVE_Recived_DATA ; 
 }  
+
+
+
+void SynchWithOBC() 
+{
+  digitalWrite(Synch_Pin,HIGH) ; 
+  delay(1000) ; 
+  digitalWrite(Synch_Pin,LOW) ; 
+}
