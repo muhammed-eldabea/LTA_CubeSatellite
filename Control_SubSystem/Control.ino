@@ -1,9 +1,4 @@
 
-/************************************************************/ 
-/* [AUTHER] : MUHAMMED ELDABEA HASHEM                       */ 
-/* [DATE]   : 17 OCT 2020                                   */ 
-/*************************************************************/ 
-
 #include <Wire.h>
 
 /******* SHARED DEFINATION  ******/
@@ -31,7 +26,7 @@
 #define MotorPin         8 
 #define LaserBeamPin     9  
 
-#define Synch_Pin               11 
+#define Synch_Pin              11 
 
 /* GLOBAL DATA */
 
@@ -59,7 +54,8 @@ int SlaveRead()  ;
  
 void setup() {
   // put your setup code here, to run once:
- 
+   Wire.begin(ControlAddress);                // join i2c bus with address #8
+   Wire.onReceive(requestEvent);
 }
 
 void loop() {
@@ -67,37 +63,37 @@ void loop() {
 
 Mode = SlaveRead() ; 
 
-switch (Mode ) 
+switch (SLAVE_Recived_DATA ) 
 {
    case INITIAL_MODE_SELECT : 
         CONTROL_IntialMode( )  ; 
         Mode= 0 ; 
-        SynchWithOBC()
+        SynchWithOBC() ; 
         
    break ;
    
    case IMAGING_MODE_SELECT : 
         CONTROL_ImagingMode( ) ;
         Mode= 0 ; 
-        SynchWithOBC()
+        SynchWithOBC() ; 
    break ;
    
    case DOWNLOAD_MODE_SELECT : 
         CONTROL_DownloadnMode( ) ; 
         CONTROL_FinishTask( )  ;
         Mode= 0 ;
-        SynchWithOBC()
+        SynchWithOBC() ; 
    break ;  
 
    case FALL_MODE_SELECT :  
         FaluairMode () ;
         Mode= 0 ; 
-        SynchWithOBC()
+        SynchWithOBC() ; 
    break ; 
    default : 
    Mode= 0 ; 
 } 
-
+delay(200) ; 
 
 
 
@@ -164,13 +160,15 @@ void CONTROL_ImagingMode( )
 } 
 
 
-/*=======================================================*/p
+/*=======================================================*/
 
 void CONTROL_DownloadnMode( )
 {
-SlaveWrite( 78 )  ; 
+
 /*Download Mode Indicator */
-digitalWrite(DownLoadModeLed , HIGH) ;
+digitalWrite(DownLoadModeLed , HIGH) ; 
+delay(500) ; 
+  digitalWrite( DownLoadModeLed ,LOW) ;
 
 }
 
@@ -187,7 +185,9 @@ delay(2000) ;
   digitalWrite( DownLoadModeLed ,LOW) ;
  
 }
-
+  digitalWrite( InitialModeLed ,LOW ) ; 
+  digitalWrite( ImagingModeLed ,LOW ) ; 
+  digitalWrite( DownLoadModeLed ,LOW) ;
 
 
 } 
@@ -223,20 +223,12 @@ void requestEvent() {
 /*this funtion iw will change it state depending on the 
 state flag value fron send to get data */ 
 
-if (StateFlag == sendData ) 
-{ 
-  Wire.write(SLAVE_SEND_DATA ) ;   
-} 
-else if (StateFlag == GetData ) 
-{
   SLAVE_Recived_DATA = Wire.read();    // receive byte as an integer
-}
- delay(100);
-    
-}
 
+} 
 
 /*=======================================================*/
+
 void SlaveWrite(int data ) 
 { 
   StateFlag = sendData ; 
