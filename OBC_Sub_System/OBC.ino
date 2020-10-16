@@ -9,6 +9,7 @@
 #include <semphr.h>  
 #include <Wire.h> 
 
+#include<SoftwareSerial.h>
 
 
 /******* SHARED DEFINATION  ******/
@@ -22,7 +23,7 @@
 
 #define Synch_Pin               11 
 
-*----------------
+
 
 /**********************/
 
@@ -36,7 +37,7 @@ SemaphoreHandle_t xSerialSemaphore;
 /*==================== Application Based Function Defination ===================================*/
 
 void OBC_CommandHandler( void *pvParameters )  ; 
-void OBC_FaluiarMode( void *pvParameters) ) ; 
+void OBC_FaluiarMode( void *pvParameters ) ; 
 void SynchWithControl()  ; 
 
 
@@ -53,27 +54,17 @@ int MasterRead( )  ;
 /*Defination for command array that  by which OBC can Control the Control ECU */
 int Command_array[3] = {INITIAL_MODE_SELECT,IMAGING_MODE_SELECT,DOWNLOAD_MODE_SELECT} ; 
 
-
+ SoftwareSerial bt(2,3);
 void setup() {
   // put your setup code here, to run once:
    Wire.begin(MasterAddress); 
    Serial.begin(9600);  /*Baaud Rate for BlueTooth module*/ 
    pinMode(Synch_Pin,INPUT) ; 
-   
-
-/*make sure that semaphore is created */
-if ( xSerialSemaphore == NULL )  
-  {
-    xSerialSemaphore = xSemaphoreCreateMutex();
-    if ( ( xSerialSemaphore ) != NULL )
-      xSemaphoreGive( ( xSerialSemaphore ) );  
-  }  
-
-
-   xTaskCreate(
+    bt.begin(9600);   
+       xTaskCreate(
     OBC_CommandHandler
     ,  "CommandHandler"  // A name just for humans
-    ,  128  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  356  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL ); 
@@ -86,24 +77,15 @@ if ( xSerialSemaphore == NULL )
     ,  NULL
     ,  0  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
     ,  NULL );
-    
-
-  
 
 
 
-
-while(Serial.read() != 's' ) 
-{
-  
 }
 
 
-}
 
 void loop() {
   // put your main code here, to run repeatedly:
-
 }  
 
 
@@ -111,33 +93,52 @@ void loop() {
 
 /*=================================================================*/ 
 
-void OBC_CommandHandler( void *pvParameters __attribute__((unused)) )   
+void OBC_CommandHandler( void *pvParameters __attribute__((unused))  )   
 
 {
+char command = 0 ; 
 
-int counter = 0 ; 
-for (;;) 
+for(;;) 
 {
 
-
-MasterWrite(Command_array[counter] ;  
- SynchWithControl()  ; 
-
-if(counter == 3 ) 
+if(bt.available() > 0)  // Send data only when you receive data:
 {
-  counter = 0 ; 
-} 
-else 
+
+command = bt.read() ; 
+delay(100) ; 
+Serial.print(command);        //Print Value inside data in Serial monitor
+
+switch(command) 
 {
-  counter++ ; 
-}
-  vTaskDelay(20);
-}
+case 'a' : 
+        MasterWrite(Command_array[0]);  
+        SynchWithControl()  ; 
+        break ; 
+case 'b' : 
+        MasterWrite(Command_array[1]);  
+        SynchWithControl()  ; 
+         break ;
+ case 'd' : 
+        MasterWrite(Command_array[2]);  
+        SynchWithControl()  ; 
+         break ;
+default : 
+command = 0 ; 
+
   
 }
 
-/*=================================================================*/ 
+}
 
+  vTaskDelay(50);
+
+}
+
+}
+  
+
+
+/*=================================================================*/ 
 
 void OBC_FaluiarMode( void *pvParameters __attribute__((unused)) ) 
 {
@@ -152,7 +153,7 @@ if (fall_State == 1 )
   digitalWrite(Fall_pin,HIGH) ; 
 }
 
-  vTaskDelay(250);
+  vTaskDelay(700);
 }
   
 }
