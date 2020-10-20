@@ -1,7 +1,7 @@
 # LTA_CubeSatellite
 a small prototype for cube-satellite have two Sub-system (OBC-Control)  
 
-	![CubeSat](https://directory.eoportal.org/documents/163813/3328251/OUFTI1_AutoD.jpeg)
+![CubeSat](https://directory.eoportal.org/documents/163813/3328251/OUFTI1_AutoD.jpeg)
 
 
 demo link 
