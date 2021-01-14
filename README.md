@@ -5,6 +5,7 @@ a small prototype for cube-satellite have two Sub-system (OBC-Control)
 
 
 LTA project definition ..
+
  الهدف من البروجكت أننا نعمل سيمويلشن للقمر الصناعي والهدف الأكبر أننا كمان نشوف ال obc 
 وال فنشكنلتي بتاعته اللي هي command handling and data gathering  علشان كدا كان لازم نغير ف المشروع ونستخدم بوردتين علشان نقدر نشوف بعنينا ونلمس موضوع modularity  ونشوف ازاي الفانكشن لل obc بتحصل .. 
  هتشوفوا اتنين اردوينو واحد بيمثل obc والتاني بيمثل ال control  وفي معنا بلوتوث موديل بيمثل لينا ground station  تقدر من خلال الابليكشن دا تتحكم ف كل تاسك بيقدر يعملها البروتوتيب اللي معانا .. من initial mode .. or communication or imaging or download modes ... 
