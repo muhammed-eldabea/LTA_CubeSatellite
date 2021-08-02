@@ -6,6 +6,21 @@ a small prototype for cube-satellite have two Sub-system (OBC-Control)
 
 LTA project definition ..
 
+Tools used :  Arduino -Motor - Bluetooth module -Temprture sensor 
+Sofware used :  Free-RTOS  , Arduno IDE 
+
+English Description :  
+ the Goal of this project is to design and build a Simulation for small cube-sat based on to main system OBC and EPS system 
+ we use Blutooth module as a link between mobilw which act like a ground station and OBC who get command and determinate in which mode  the satalite should be 
+ we use Motor to simulate the atliude control unite 
+ Finaly we PORT Free-RTOS to mange the system time requirments  
+
+https://www.facebook.com/MEKANOS125/videos/3408761889214565
+
+Arabic : 
+
+
+
  الهدف من البروجكت أننا نعمل سيمويلشن للقمر الصناعي والهدف الأكبر أننا كمان نشوف ال obc 
 وال فنشكنلتي بتاعته اللي هي command handling and data gathering  علشان كدا كان لازم نغير ف المشروع ونستخدم بوردتين علشان نقدر نشوف بعنينا ونلمس موضوع modularity  ونشوف ازاي الفانكشن لل obc بتحصل .. 
  هتشوفوا اتنين اردوينو واحد بيمثل obc والتاني بيمثل ال control  وفي معنا بلوتوث موديل بيمثل لينا ground station  تقدر من خلال الابليكشن دا تتحكم ف كل تاسك بيقدر يعملها البروتوتيب اللي معانا .. من initial mode .. or communication or imaging or download modes ... 
